@@ -1,7 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://scienceverse.org/schema/power.json",
-  "$defs": { "power_analysis": { "type": "string" }  },
   "title": "Power Analysis",
   "description": "A power analysis reported in a document.",
   "type": "object",
