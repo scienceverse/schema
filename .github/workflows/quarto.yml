@@ -6,7 +6,6 @@ on:
 
 
 #configure manual trigger
-on:
   workflow_dispatch:
 
 jobs:
