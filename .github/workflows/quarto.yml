@@ -1,4 +1,4 @@
-wname: Render and Publish
+name: Render and Publish
 on:
   push:
     branches:
