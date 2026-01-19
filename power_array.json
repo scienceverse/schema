@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://scienceverse.org/schema/power_array.json",
+  "title": "Power Analyses",
+  "description": "A collection of power analyses reported in a document.",
+  "type": "object",
+  "properties": {
+    "power_analyses": {
+      "type": "array",
+      "items": { "$ref": "https://scienceverse.org/schema/power.json" }
+    }
+  },
+
+  "required": ["power_analyses"],
+  "additionalProperties": false
+}

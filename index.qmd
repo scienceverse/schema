@@ -1,0 +1,10 @@
+The following JSON schema are provided for scienceverse objects.
+
+```{r}
+#| echo: false
+#| results: 'asis'
+f <- list.files(pattern = "\\.json") 
+
+sprintf("- [%s](%s)", f, f) |> paste0(collapse = "\n") |> cat()
+```
+

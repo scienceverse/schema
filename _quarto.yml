@@ -1,0 +1,29 @@
+project:
+  type: website
+  output-dir: docs
+  resources: []
+
+website:
+  title: "ScienceVerse Schema"
+  site-url: https://scienceverse.org/schema/
+  repo-url: https://github.com/scienceverse/schema
+  image: https://scienceverse.org/images/logos/scienceverse.png
+#  favicon: /images/favicon.ico
+  open-graph: true
+  navbar:
+    logo: https://scienceverse.org/images/logos/scienceverse.png
+    logo-alt: "Red hexagon with SCIENCE VERSE in black art deco letters"
+    right:
+      - text: " "
+        icon: github
+        href: https://github.com/scienceverse/schema
+format:
+  html:
+    theme: spacelab
+    primary: '#327118'
+    mainfont: "Open Sans"
+    monofont: "Fira Code"
+    css: https://scienceverse.org/include/styles.scss
+    fontsize: 1.1em
+
+
