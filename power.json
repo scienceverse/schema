@@ -2,9 +2,14 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://scienceverse.org/schema/power.json",
   "title": "Power Analyses",
-  "description": "A power analysis reported in a document.",
+  "description": "A power analysis.",
   "type": "object",
   "properties": {
+    "text": {
+      "description": "The specific text that contains all of the information used to determine this object's properties.",
+      "type": ["string", "null"]
+    },
+    
     "power_type": {
       "description": "The type of power annalysis. An 'apriori' power analysis is used to calculate the required sample size to achieve a desired level of statistical power given an effect size, statistical test, and alpha level. A 'sensitivity' analysis is used to estimate, given a sample size, which effect sizes a design has sufficient power (e.g., 80% or 90%) to detect, given a statistical test and alpha level. A 'posthoc' power analysis (also referred to as observed power, or retrospective power) uses an empirically observed effect size, and computes the achieved power for that empirically observed effect size, given a statistical test and alpha level.",
       "type": ["string", "null"],
