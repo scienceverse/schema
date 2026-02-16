@@ -104,7 +104,7 @@
         "parent_section_id": { "type": "integer" }, 
         "section_type": { 
           "type": "string",
-          "enum": {
+          "enum": [
             "abstract",
             "intro",
             "method",
@@ -116,7 +116,7 @@
             "endnote",
             "footnote",
             "unknown"
-          }
+          ]
         }, 
         "classification_score": { 
           "type": "number", 
