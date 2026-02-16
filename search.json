@@ -4,6 +4,6 @@
     "href": "index.html",
     "title": "ScienceVerse Schema",
     "section": "",
-    "text": "The following JSON schema are provided for scienceverse objects.\n\npower_array.json\npower.json"
+    "text": "The following JSON schema are provided for scienceverse objects.\n\npaper.json\npower_array.json\npower.json"
   }
 ]

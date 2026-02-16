@@ -1,0 +1,230 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://scienceverse.org/schema/paper.json",
+  "title": "Bibr Paper",
+  "description": "A research paper, as processed by bibr",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "A unique ID for each paper (usually the bibr file_hash)",
+      "type": ["string", "null"]
+    },
+    "info": {
+      "description": "A table of information about the paper",
+      "type": "object"
+    },
+    "authors": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/author" }
+    },
+    "text": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/text" }
+    },
+    "sections": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/section" }
+    },
+    "links": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/link" }
+    },
+    "bib": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/bib" }
+    },
+    "xrefs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/xref" }
+    },
+    "figs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/fig" }
+    },
+    "tbls": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/tbl" }
+    }
+  },
+
+  "required": [
+    "id",
+    "info",
+    "authors", 
+    "text",
+    "sections",
+    "links",
+    "bib",
+    "xrefs",
+    "figures",
+    "tables"
+  ],
+
+  "additionalProperties": false,
+  
+  "$defs": {
+    "author": {
+      "properties": {
+        "author_id": { "type": "integer" }, 
+        "given": { "type": ["string", "null"] }, 
+        "family": { "type": ["string", "null"] }, 
+        "affiliation": { "type": ["string", "null"] }, 
+        "email": { "type": ["string", "null"] }, 
+        "corresponding": { "type": ["string", "null"] }, 
+        "orcid": { "type": ["string", "null"] }, 
+        "role": { 
+          "type": "array",
+          "items": { "type": ["string", "null"] }
+        }
+      },
+      "required": [ "author_id", 
+                    "given", 
+                    "family", 
+                    "affiliation", 
+                    "email", 
+                    "corresponding", 
+                    "orcid",
+                    "role"],
+      "additionalProperties": false
+    },
+    "text": {
+      "properties": {
+        "text_id": { "type": "integer" },
+        "section_id": { "type": "integer" },
+        "paragraph_id": { "type": "integer" },
+        "text": { "type": "string" }
+      },
+      "required": ["text_id", "section_id", "paragraph_id", "text"],
+      "additionalProperties": false
+    },
+    "section": {
+      "properties": {
+        "section_id": { "type": "integer" },
+        "header": { "type": "string" },
+        "parent_section_id": { "type": "integer" }, 
+        "section_type": { 
+          "type": "string",
+          "enum": {
+            "abstract",
+            "intro",
+            "method",
+            "results",
+            "discussion",
+            "references",
+            "acknoweldegment",
+            "funding",
+            "endnote",
+            "footnote",
+            "unknown"
+          }
+        }, 
+        "classification_score": { 
+          "type": "number", 
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "required": ["section_id", 
+                   "header", 
+                   "parent_section_id", 
+                   "section_type", 
+                   "classification_score"],
+      "additionalProperties": false
+    },
+    "link": {
+      "properties": {
+        "url": { 
+          "type": "string", 
+          "format": "uri" 
+        },
+        "link_text": { "type": "string" },
+        "text_id": { "type": "integer" }
+      },
+      "required": ["url", "link_text", "text_id"],
+      "additionalProperties": false
+    },
+    "bib": {
+      "properties": {
+        "bib_id": { "type": "integer" }, 
+        "title": { "type": "string" }, 
+        "first_page": { "type": "string" }, 
+        "volume": { "type": "string" }, 
+        "author": { "type": "string" }, 
+        "year": { "type": "string" }, 
+        "journal_title": { "type": "string" }, 
+        "isbn": { "type": "string" }, 
+        "doi": { "type": "string" }, 
+        "bibtype": { "type": "string" }, 
+        "bib_text": { "type": "string" }, 
+        "last_page": { "type": "string" }, 
+        "issue": { "type": "string" }, 
+        "editor": { "type": "string" }, 
+        "publisher": { "type": "string" }, 
+        "issn": { "type": "string" }, 
+        "link": { "type": "string" }, 
+        "crossref_verified": { "type": "boolean" }, 
+        "crossref_match": { "type": "string" }, 
+        "crossref_score": { "type": "number" }
+      },
+      "required": [ "bib_id", "title", "first_page", "volume", "author", "year", 
+                    "journal_title", "isbn", "doi", "bibtype", "bib_text", "last_page", 
+                    "issue", "editor", "publisher", "issn", "link", "crossref_verified", 
+                    "crossref_match", "crossref_score"],
+      "additionalProperties": false
+    },
+    "xref": {
+      "properties": {
+        "xref_id": { "type": "integer" }, 
+        "xref_type": { 
+          "type": "string",
+          "enum": [
+            "bib",
+            "tbl",
+            "fig"
+          ]
+        }, 
+        "contents": { "type": "string" }, 
+        "text_id": { "type": "integer" }
+      },
+      "required": ["xref_id", "xref_type", "contents", "text_id"],
+      "additionalProperties": false
+    },
+    "tbl": {
+      "properties": {
+        "tbl_id": {
+          "description": "A unique ID for each table",
+          "type": ["integer", "null"]
+        },
+        "caption": {
+          "description": "The table caption",
+          "type": ["string", "null"]
+        },
+        "contents": {
+          "description": "The table contents as tabular data",
+          "type": ["object", "null"]
+        }
+      },
+      "required": [ "tbl_id", "caption", "table"],
+      "additionalProperties": false
+    },
+    "fig": {
+      "properties": {
+        "fig_id": {
+          "description": "A unique ID for each figure",
+          "type": ["integer", "null"]
+        },
+        "caption": {
+          "description": "The figure caption",
+          "type": ["string", "null"]
+        },
+        "image": {
+          "description": "The base64 image or reference to it (undecided)",
+          "type": ["string", "null"]
+        }
+      },
+      "required": [ "fig_id", "caption", "image"],
+      "additionalProperties": false
+    }
+  }
+}
+
