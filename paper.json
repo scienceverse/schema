@@ -19,7 +19,10 @@
           "type": "array",
           "items": { "type": "string" }
         }, 
-        "doi": { "type": ["string", "null"] }, 
+        "doi": { 
+          "type": ["string", "null"],
+          "pattern": "^10\\.\\d{4,9}/\\S+$"
+        }, 
         "file_hash": { 
           "type": "string", 
           "pattern": "^[a-f0-9]{14}$"
@@ -58,8 +61,7 @@
             "Medical and Health Sciences",
             "Agricultural and Veterinary Sciences",
             "Social Sciences",
-            "Humanities and the arts",
-            null
+            "Humanities and the arts"
           ]
         }, 
         "oecd_l2": {
@@ -106,8 +108,7 @@
             "Languages and literature",
             "Philosophy, ethics and religion",
             "Art",
-            "Other Humanities",
-            null
+            "Other Humanities"
           ]
         }, 
         "oecd_confidence": {
@@ -127,7 +128,7 @@
     },
     "text": {
       "type": "array",
-      "items": { "$ref": "#/$defs/text" }
+      "items": { "$ref": "#/$defs/sentence" }
     },
     "sections": {
       "type": "array",
@@ -139,7 +140,7 @@
     },
     "bib": {
       "type": "array",
-      "items": { "$ref": "#/$defs/bib" }
+      "items": { "$ref": "#/$defs/bibentry" }
     },
     "xrefs": {
       "type": "array",
@@ -164,48 +165,56 @@
     "links",
     "bib",
     "xrefs",
-    "figures",
-    "tables"
+    "figs",
+    "tbls"
   ],
 
   "additionalProperties": false,
   
   "$defs": {
     "author": {
+      "type": "object",
       "properties": {
         "author_id": { "type": "integer" }, 
         "given": { "type": ["string", "null"] }, 
         "family": { "type": ["string", "null"] }, 
         "affiliation": { "type": ["string", "null"] }, 
-        "email": { "type": ["string", "null"] }, 
-        "corresponding": { "type": ["string", "null"] }, 
-        "orcid": { "type": ["string", "null"] }, 
+        "email": { 
+          "type": ["string", "null"],
+          "format": "email"
+        }, 
+        "corresponding": { "type": "boolean" }, 
+        "orcid": { 
+          "type": ["string", "null"],
+          "pattern": "^\\d{4}-\\d{4}-\\d{4}-\\d{3}[\\dX]$" 
+        }, 
         "role": { 
           "type": "array",
           "items": { "type": ["string", "null"] }
         }
       },
-      "required": [ "author_id", 
-                    "given", 
-                    "family", 
-                    "affiliation", 
-                    "email", 
-                    "corresponding", 
-                    "orcid",
-                    "role"],
-      "additionalProperties": false
+      "required": [ 
+        "author_id", 
+        "given", 
+        "family", 
+        "affiliation", 
+        "email", 
+        "corresponding", 
+        "orcid"
+      ]
     },
-    "text": {
+    "sentence": {
+      "type": "object",
       "properties": {
         "text_id": { "type": "integer" },
         "section_id": { "type": "integer" },
         "paragraph_id": { "type": "integer" },
         "text": { "type": "string" }
       },
-      "required": ["text_id", "section_id", "paragraph_id", "text"],
-      "additionalProperties": false
+      "required": ["text_id", "section_id", "paragraph_id", "text"]
     },
     "section": {
+      "type": "object",
       "properties": {
         "section_id": { "type": "integer" },
         "header": { "type": "string" },
@@ -236,32 +245,35 @@
                    "header", 
                    "parent_section_id", 
                    "section_type", 
-                   "classification_score"],
-      "additionalProperties": false
+                   "classification_score"]
     },
     "link": {
+      "type": "object",
       "properties": {
         "url": { 
           "type": "string", 
           "format": "uri" 
         },
-        "link_text": { "type": "string" },
+        "link_text": { "type": ["string", "null"] },
         "text_id": { "type": "integer" }
       },
-      "required": ["url", "link_text", "text_id"],
-      "additionalProperties": false
+      "required": ["url", "link_text", "text_id"]
     },
-    "bib": {
+    "bibentry": {
+      "type": "object",
       "properties": {
         "bib_id": { "type": "integer" }, 
         "title": { "type": "string" }, 
         "first_page": { "type": "string" }, 
         "volume": { "type": "string" }, 
         "author": { "type": "string" }, 
-        "year": { "type": "string" }, 
+        "year": { "type": "integer" }, 
         "journal_title": { "type": "string" }, 
         "isbn": { "type": "string" }, 
-        "doi": { "type": "string" }, 
+        "doi": { 
+          "type": "string",
+          "pattern": "^10\\.\\d{4,9}/\\S+$"
+        }, 
         "bibtype": { "type": "string" }, 
         "bib_text": { "type": "string" }, 
         "last_page": { "type": "string" }, 
@@ -274,13 +286,10 @@
         "crossref_match": { "type": "string" }, 
         "crossref_score": { "type": "number" }
       },
-      "required": [ "bib_id", "title", "first_page", "volume", "author", "year", 
-                    "journal_title", "isbn", "doi", "bibtype", "bib_text", "last_page", 
-                    "issue", "editor", "publisher", "issn", "link", "crossref_verified", 
-                    "crossref_match", "crossref_score"],
-      "additionalProperties": false
+      "required": ["bib_id", "bib_text"]
     },
     "xref": {
+      "type": "object",
       "properties": {
         "xref_id": { "type": "integer" }, 
         "xref_type": { 
@@ -294,10 +303,10 @@
         "contents": { "type": "string" }, 
         "text_id": { "type": "integer" }
       },
-      "required": ["xref_id", "xref_type", "contents", "text_id"],
-      "additionalProperties": false
+      "required": ["xref_id", "xref_type", "contents", "text_id"]
     },
     "tbl": {
+      "type": "object",
       "properties": {
         "tbl_id": {
           "description": "A unique ID for each table",
@@ -309,13 +318,17 @@
         },
         "contents": {
           "description": "The table contents as tabular data",
-          "type": ["object", "null"]
+          "type": ["array", "null"],
+          "items": {
+            "type": "array",
+            "items": { "type": ["string", "number", "boolean", "null"] }
+          }
         }
       },
-      "required": [ "tbl_id", "caption", "table"],
-      "additionalProperties": false
+      "required": [ "tbl_id", "caption", "contents"]
     },
     "fig": {
+      "type": "object",
       "properties": {
         "fig_id": {
           "description": "A unique ID for each figure",
@@ -330,8 +343,7 @@
           "type": ["string", "null"]
         }
       },
-      "required": [ "fig_id", "caption", "image"],
-      "additionalProperties": false
+      "required": [ "fig_id", "caption", "image"]
     }
   }
 }
