@@ -21,7 +21,7 @@
         }, 
         "doi": { "type": ["string", "null"] }, 
         "file_hash": { 
-          "type": "string" 
+          "type": "string", 
           "pattern": "^[a-f0-9]{14}$"
         },
         "input_format": {
@@ -50,7 +50,7 @@
           "maximum": 1
         }, 
         "oecd_l1": {
-          "description": "OECD Research Area, Level 1"
+          "description": "OECD Research Area, Level 1",
           "type": ["string", "null"],
           "enum": [
             "Natural Sciences",
@@ -63,7 +63,7 @@
           ]
         }, 
         "oecd_l2": {
-          "description": "OECD Research Area, Level 2"
+          "description": "OECD Research Area, Level 2",
           "type": ["string", "null"],
           "enum": [
             "Mathematics",
