@@ -11,7 +11,115 @@
     },
     "info": {
       "description": "A table of information about the paper",
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" }, 
+        "description": { "type": ["string", "null"] }, 
+        "keywords": {
+          "type": "array",
+          "items": { "type": "string" }
+        }, 
+        "doi": { "type": ["string", "null"] }, 
+        "file_hash": { 
+          "type": "string" 
+          "pattern": "^[a-f0-9]{14}$"
+        },
+        "input_format": {
+          "type": "string",
+          "enum": [
+            "pdf",
+            "html",
+            "docx",
+            "doc",
+            "md",
+            "unknown"
+          ]
+        }, 
+        "file_name": {  "type": "string" }, 
+        "bibr_version": { "type": "string" }, 
+        "paper_type": {
+          "type": "string",
+          "enum": [
+            "empirical",
+            "unknown"
+          ]
+        }, 
+        "paper_type_confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }, 
+        "oecd_l1": {
+          "description": "OECD Research Area, Level 1"
+          "type": ["string", "null"],
+          "enum": [
+            "Natural Sciences",
+            "Engineering and Technology",
+            "Medical and Health Sciences",
+            "Agricultural and Veterinary Sciences",
+            "Social Sciences",
+            "Humanities and the arts",
+            null
+          ]
+        }, 
+        "oecd_l2": {
+          "description": "OECD Research Area, Level 2"
+          "type": ["string", "null"],
+          "enum": [
+            "Mathematics",
+            "Computer and information sciences",
+            "Physical sciences",
+            "Chemical sciences",
+            "Earth and related environmental sciences",
+            "Biological sciences",
+            "Other natural sciences",
+            "Civil engineering",
+            "Electrical engineering, electronic engineering, information engineering",
+            "Mechanical engineering",
+            "Chemical engineering",
+            "Materials engineering",
+            "Medical engineering",
+            "Environmental engineering",
+            "Environmental biotechnology",
+            "Industrial biotechnology",
+            "Nano-technology",
+            "Other engineering and technologies",
+            "Basic medical research",
+            "Clinical medicine",
+            "Health sciences",
+            "Medical biotechnology",
+            "Other medical science",
+            "Agriculture, forestry, fisheries",
+            "Animal and dairy science",
+            "Veterinary science",
+            "Other agricultural science",
+            "Psychology and cognitive science",
+            "Economics and business",
+            "Educational sciences",
+            "Sociology",
+            "Law",
+            "Political science",
+            "Social and economic geography",
+            "Media and communication",
+            "Other social sciences",
+            "History and archeology",
+            "Languages and literature",
+            "Philosophy, ethics and religion",
+            "Art",
+            "Other Humanities",
+            null
+          ]
+        }, 
+        "oecd_confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "required": ["title", "description", "keywords", "doi", "file_hash", 
+"input_format", "file_name", "bibr_version", "paper_type", "paper_type_confidence", 
+"oecd_l1", "oecd_l2", "oecd_confidence"],
+      "additionalProperties": false
     },
     "authors": {
       "type": "array",
