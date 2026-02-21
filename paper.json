@@ -5,7 +5,7 @@
   "description": "A research paper, as processed by bibr",
   "type": "object",
   "properties": {
-    "id": {
+    "paper_id": {
       "description": "A unique ID for each paper (usually the bibr file_hash)",
       "type": ["string", "null"]
     },
@@ -157,7 +157,7 @@
   },
 
   "required": [
-    "id",
+    "paper_id",
     "info",
     "authors", 
     "text",
