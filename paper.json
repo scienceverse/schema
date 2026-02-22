@@ -10,7 +10,70 @@
       "type": ["string", "null"]
     },
     "info": {
-      "description": "A table of information about the paper",
+      "type": "array",
+      "items": { "$ref": "#/$defs/info" }
+    },
+    "authors": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/author" }
+    },
+    "text": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/sentence" }
+    },
+    "sections": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/section" }
+    },
+    "links": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/link" }
+    },
+    "bib": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/bibentry" }
+    },
+    "bib_matches": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/bibentry" }
+    },
+    "xrefs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/xref" }
+    },
+    "figs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/fig" }
+    },
+    "tbls": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/tbl" }
+    },
+    "equations": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/equation" }
+    }
+  },
+
+  "required": [
+    "paper_id",
+    "info",
+    "authors", 
+    "text",
+    "sections",
+    "links",
+    "bib",
+    "bib_matches",
+    "xrefs",
+    "figs",
+    "tbls",
+    "equations"
+  ],
+
+  "additionalProperties": false,
+  
+  "$defs": {
+    "info": {
       "type": "object",
       "properties": {
         "title": { "type": "string" }, 
@@ -119,59 +182,8 @@
       },
       "required": ["title", "description", "keywords", "doi", "file_hash", 
 "input_format", "file_name", "bibr_version", "paper_type", "paper_type_confidence", 
-"oecd_l1", "oecd_l2", "oecd_confidence"],
-      "additionalProperties": false
+"oecd_l1", "oecd_l2", "oecd_confidence"]
     },
-    "authors": {
-      "type": "array",
-      "items": { "$ref": "#/$defs/author" }
-    },
-    "text": {
-      "type": "array",
-      "items": { "$ref": "#/$defs/sentence" }
-    },
-    "sections": {
-      "type": "array",
-      "items": { "$ref": "#/$defs/section" }
-    },
-    "links": {
-      "type": "array",
-      "items": { "$ref": "#/$defs/link" }
-    },
-    "bib": {
-      "type": "array",
-      "items": { "$ref": "#/$defs/bibentry" }
-    },
-    "xrefs": {
-      "type": "array",
-      "items": { "$ref": "#/$defs/xref" }
-    },
-    "figs": {
-      "type": "array",
-      "items": { "$ref": "#/$defs/fig" }
-    },
-    "tbls": {
-      "type": "array",
-      "items": { "$ref": "#/$defs/tbl" }
-    }
-  },
-
-  "required": [
-    "paper_id",
-    "info",
-    "authors", 
-    "text",
-    "sections",
-    "links",
-    "bib",
-    "xrefs",
-    "figs",
-    "tbls"
-  ],
-
-  "additionalProperties": false,
-  
-  "$defs": {
     "author": {
       "type": "object",
       "properties": {
@@ -292,8 +304,11 @@
         "title": { "type": "string" }, 
         "author": { "type": "string" },
         "year": { "type": "integer" }, 
-        "journal_title": { "type": "string" }, 
-        "issue": { "type": "string" }, 
+        "journal": { "type": "string" }, 
+        "number": { 
+          "description": "issue number",
+          "type": "string" 
+        }, 
         "volume": { "type": "string" }, 
         "first_page": { "type": "string" }, 
         "last_page": { "type": "string" }, 
@@ -302,12 +317,22 @@
         "publisher": { "type": "string" }, 
         "isbn": { "type": "string" }, 
         "issn": { "type": "string" }, 
-        "link": { "type": "string" }, 
-        "crossref_verified": { "type": "boolean" }, 
-        "crossref_match": { "type": "string" }, 
-        "crossref_score": { "type": "number" }
+        "url": { "type": "string" }, 
+        "match_source": { 
+          "type": "string", 
+          "enum": [
+            "crossref",
+            "openalex"
+          ]
+        },
+        "match_score": { 
+          "definition": "A score describing the match between the original reference text and the entry from match_source",
+          "type": "number",
+          "minimium": 0,
+          "maximum": 100
+        }
       },
-      "required": ["bib_id", "bib_text"]
+      "required": ["bib_id"]
     },
     "xref": {
       "type": "object",
@@ -365,6 +390,32 @@
         }
       },
       "required": [ "fig_id", "caption", "image"]
+    },
+    "equation": {
+      "type": "object",
+      "properties": {
+        "text_id": { 
+          "definition": "ID from the text table for the source of the equation",
+          "type": "integer"
+        },
+        "grp_id": { 
+          "definition": "Grouping within a sentence (e.g., multiple equations that are grouped by brackets) or table",
+          "type": "integer" 
+        },
+        "lhs": { 
+          "definition": "Left-hand side of the equation",
+          "type": "string" 
+        },
+        "comp": { 
+          "definition": "Comparator symbol(s)",
+          "type": "string" 
+        },
+        "rhs": { 
+          "definition": "Right-hand side of the equation",
+          "type": "string" 
+        }
+      },
+      "required": ["text_id", "grp_id", "lhs", "comp", "rhs"]
     }
   }
 }
