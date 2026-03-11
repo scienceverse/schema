@@ -307,7 +307,7 @@
       "properties": {
         "xref_id": { 
           "type": "integer", 
-          "description": "The ID from the bib, tbl, fig, or text table (for footnotes)"
+          "description": "The ID from the bib, tbl, fig, or section table (for footnotes)"
         }, 
         "xref_type": { 
           "type": "string",
