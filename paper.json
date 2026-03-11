@@ -9,45 +9,53 @@
       "description": "A unique ID for each paper (usually the bibr file_hash)",
       "type": ["string", "null"]
     },
-    "info": {
-      "type": "array",
-      "items": { "$ref": "#/$defs/info" }
+    "info": { 
+      "$ref": "#/$defs/info" 
     },
     "authors": {
       "type": "array",
-      "items": { "$ref": "#/$defs/author" }
+      "items": { "$ref": "#/$defs/author" }, 
+      "uniqueItems": true
     },
     "text": {
       "type": "array",
-      "items": { "$ref": "#/$defs/sentence" }
+      "items": { "$ref": "#/$defs/sentence" }, 
+      "uniqueItems": true
     },
     "sections": {
       "type": "array",
-      "items": { "$ref": "#/$defs/section" }
+      "items": { "$ref": "#/$defs/section" }, 
+      "uniqueItems": true
     },
     "links": {
       "type": "array",
-      "items": { "$ref": "#/$defs/link" }
+      "items": { "$ref": "#/$defs/link" }, 
+      "uniqueItems": true
     },
     "bib": {
       "type": "array",
-      "items": { "$ref": "#/$defs/bibentry" }
+      "items": { "$ref": "#/$defs/biblio_ref"}, 
+      "uniqueItems": true
     },
     "bib_matches": {
       "type": "array",
-      "items": { "$ref": "#/$defs/bibentry" }
+      "items": { "$ref": "#/$defs/biblio_match"}, 
+      "uniqueItems": true
     },
     "xrefs": {
       "type": "array",
-      "items": { "$ref": "#/$defs/xref" }
+      "items": { "$ref": "#/$defs/xref" }, 
+      "uniqueItems": true
     },
     "figs": {
       "type": "array",
-      "items": { "$ref": "#/$defs/fig" }
+      "items": { "$ref": "#/$defs/fig" }, 
+      "uniqueItems": true
     },
     "tbls": {
       "type": "array",
-      "items": { "$ref": "#/$defs/tbl" }
+      "items": { "$ref": "#/$defs/tbl" }, 
+      "uniqueItems": true
     },
     "equations": {
       "type": "array",
@@ -75,6 +83,21 @@
   "$defs": {
     "info": {
       "type": "object",
+      "required": [
+        "title", 
+        "description", 
+        "keywords", 
+        "doi", 
+        "file_hash", 
+        "input_format", 
+        "file_name", 
+        "bibr_version", 
+        "paper_type", 
+        "paper_type_confidence", 
+        "oecd_l1", 
+        "oecd_l2", 
+        "oecd_confidence"
+      ],
       "properties": {
         "title": { "type": "string" }, 
         "description": { "type": ["string", "null"] }, 
@@ -124,7 +147,8 @@
             "Medical and Health Sciences",
             "Agricultural and Veterinary Sciences",
             "Social Sciences",
-            "Humanities and the arts"
+            "Humanities and the arts",
+            null
           ]
         }, 
         "oecd_l2": {
@@ -171,7 +195,8 @@
             "Languages and literature",
             "Philosophy, ethics and religion",
             "Art",
-            "Other Humanities"
+            "Other Humanities",
+            null
           ]
         }, 
         "oecd_confidence": {
@@ -179,15 +204,23 @@
           "minimum": 0,
           "maximum": 1
         }
-      },
-      "required": ["title", "description", "keywords", "doi", "file_hash", 
-"input_format", "file_name", "bibr_version", "paper_type", "paper_type_confidence", 
-"oecd_l1", "oecd_l2", "oecd_confidence"]
+      }
     },
     "author": {
       "type": "object",
+      "required": [ 
+        "author_id", 
+        "given", 
+        "family", 
+        "affiliation", 
+        "email", 
+        "corresponding", 
+        "orcid"
+      ],
       "properties": {
-        "author_id": { "type": "integer" }, 
+        "author_id": { 
+          "type": "integer"
+        }, 
         "given": { "type": ["string", "null"] }, 
         "family": { "type": ["string", "null"] }, 
         "affiliation": { "type": ["string", "null"] }, 
@@ -204,31 +237,31 @@
           "type": "array",
           "items": { "type": ["string", "null"] }
         }
-      },
-      "required": [ 
-        "author_id", 
-        "given", 
-        "family", 
-        "affiliation", 
-        "email", 
-        "corresponding", 
-        "orcid"
-      ]
+      }
     },
     "sentence": {
       "type": "object",
+      "required": ["text_id", "section_id", "paragraph_id", "text"],
       "properties": {
-        "text_id": { "type": "integer" },
+        "text_id": { 
+          "type": "integer"
+        },
         "section_id": { "type": "integer" },
         "paragraph_id": { "type": "integer" },
         "text": { "type": "string" }
-      },
-      "required": ["text_id", "section_id", "paragraph_id", "text"]
+      }
     },
     "section": {
       "type": "object",
+      "required": ["section_id", 
+                   "header", 
+                   "parent_section_id", 
+                   "section_type", 
+                   "classification_score"],
       "properties": {
-        "section_id": { "type": "integer" },
+        "section_id": { 
+          "type": "integer" 
+        },
         "header": { "type": "string" },
         "parent_section_id": { "type": "integer" }, 
         "section_type": { 
@@ -240,10 +273,12 @@
             "results",
             "discussion",
             "references",
-            "acknoweldegment",
+            "acknowledgment",
             "funding",
             "endnote",
             "footnote",
+            "tbl_cap",
+            "fig_cap",
             "unknown"
           ]
         }, 
@@ -252,15 +287,11 @@
           "minimum": 0,
           "maximum": 1
         }
-      },
-      "required": ["section_id", 
-                   "header", 
-                   "parent_section_id", 
-                   "section_type", 
-                   "classification_score"]
+      }
     },
     "link": {
       "type": "object",
+      "required": ["url", "text_id"],
       "properties": {
         "url": { 
           "type": "string", 
@@ -268,154 +299,208 @@
         },
         "link_text": { "type": ["string", "null"] },
         "text_id": { "type": "integer" }
-      },
-      "required": ["url", "link_text", "text_id"]
-    },
-    "bibentry": {
-      "type": "object",
-      "properties": {
-        "bib_id": { "type": "integer" }, 
-        "bib_text": { 
-          "definition": "The full text of the reference exactly as written in the paper",
-          "type": "string" }, 
-        "bibtype": {
-          "type": "string",
-          "enum": [
-            "article",
-            "book",
-            "booklet",
-            "conference",
-            "inbook",
-            "incollection",
-            "inproceedings",
-            "manual",
-            "mastersthesis",
-            "misc",
-            "phdthesis",
-            "proceedings",
-            "techreport",
-            "unpublished"
-          ]
-        }, 
-        "doi": { 
-          "type": "string",
-          "pattern": "^10\\.\\d{4,9}/\\S+$"
-        }, 
-        "title": { "type": "string" }, 
-        "author": { "type": "string" },
-        "year": { "type": "integer" }, 
-        "journal": { "type": "string" }, 
-        "number": { 
-          "description": "issue number",
-          "type": "string" 
-        }, 
-        "volume": { "type": "string" }, 
-        "first_page": { "type": "string" }, 
-        "last_page": { "type": "string" }, 
-        "booktitle": { "type": "string" },
-        "editor": { "type": "string" }, 
-        "publisher": { "type": "string" }, 
-        "isbn": { "type": "string" }, 
-        "issn": { "type": "string" }, 
-        "url": { "type": "string" }, 
-        "match_source": { 
-          "type": "string", 
-          "enum": [
-            "crossref",
-            "openalex"
-          ]
-        },
-        "match_score": { 
-          "definition": "A score describing the match between the original reference text and the entry from match_source",
-          "type": "number",
-          "minimium": 0,
-          "maximum": 100
-        }
-      },
-      "required": ["bib_id"]
+      }
     },
     "xref": {
       "type": "object",
+      "required": ["xref_id", "xref_type", "contents", "text_id"],
       "properties": {
-        "xref_id": { "type": "integer" }, 
+        "xref_id": { 
+          "type": "integer", 
+          "description": "The ID from the bib, tbl, fig, or text table (for footnotes)"
+        }, 
         "xref_type": { 
           "type": "string",
           "enum": [
             "bib",
             "tbl",
-            "fig"
+            "fig",
+            "footnote"
           ]
         }, 
-        "contents": { "type": "string" }, 
-        "text_id": { "type": "integer" }
-      },
-      "required": ["xref_id", "xref_type", "contents", "text_id"]
+        "contents": { "type": ["string", "null"] }, 
+        "text_id": { 
+          "type": "integer", 
+          "description": "The ID from the text table for the sentence containing the reference to this object."
+        }
+      }
+    },
+    "biblio": {
+      "type": "object",
+      "required": [
+        "bib_id",
+        "bib_type",
+        "title",
+        "authors",
+        "publication_year"
+      ],
+      "properties": {
+        "bib_id": {
+          "type": "integer",
+          "description": "Paper-specific ID"
+        },
+        "bib_type": {
+          "type": "string",
+          "enum": [
+            "journal_article",
+            "book",
+            "book_chapter",
+            "dataset",
+            "software",
+            "preprint",
+            "conference_paper",
+            "report",
+            "other"
+          ]
+        },
+        "doi": {
+          "type": ["string", "null"],
+          "pattern": "^10\\.\\d{4,9}/\\S+$"
+        },
+        "title": { "type": "string" },
+        "authors": {
+          "type": "string",
+          "description": "Pipe-separated full (last, given) author/creator names in order"
+        },
+        "editors": {
+          "type": "string",
+          "description": "Pipe-separated full (last, given) editor names in order"
+        },
+        "publisher": {
+          "type": "string"
+        },
+        "publication_year": {
+          "type": "integer"
+        },
+        "publication_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "container": {
+          "type": "string",
+          "description": "Journal or book title"
+        },
+        "volume": { "type": "string" },
+        "issue": { "type": "string" },
+        "pages": { "type": "string" },
+        "edition": { "type": "string" },
+        "version": { "type": "string" },
+        "url": { 
+          "type": "string",
+          "format": "uri" 
+        }
+      }
+    },
+    "biblio_ref": {
+      "type": "object",
+      "allOf": [
+        { "$ref": "#/$defs/biblio" },
+        {
+          "type": "object",
+          "required": ["text_id"],
+          "properties": {
+            "text_id": { 
+              "type": "integer",
+              "description": "The text table ID of the reference exactly as written in the paper"
+            }
+          }
+        }
+      ]
+    },
+    "biblio_match": { 
+      "type": "object",
+      "allOf": [
+        { "$ref": "#/$defs/biblio" },
+        {
+          "type": "object",
+          "required": ["source"],
+          "properties": {
+            "source": {
+              "type": "string",
+              "description": "Metadata source",
+              "enum": [
+                "crossref",
+                "datacite",
+                "openalex",
+                "manual"
+              ]
+            },
+            "match_score": { 
+               "description": "A score describing the match between the original reference and the entry from source",
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            }
+          }
+        }
+      ]
     },
     "tbl": {
       "type": "object",
+      "required": [ "tbl_id", "section_id"],
       "properties": {
         "tbl_id": {
           "description": "A unique ID for each table",
-          "type": ["integer", "null"]
+          "type": "integer"
         },
-        "caption": {
-          "description": "The table caption",
-          "type": ["string", "null"]
+        "section_id": {
+          "description": "The ID from the sections table for this table",
+          "type": "integer"
         },
         "contents": {
           "description": "The table contents as tabular data",
-          "type": ["array", "null"],
+          "type": "array",
           "items": {
             "type": "array",
             "items": { "type": ["string", "number", "boolean", "null"] }
           }
         }
-      },
-      "required": [ "tbl_id", "caption", "contents"]
+      }
     },
     "fig": {
       "type": "object",
+      "required": [ "fig_id", "section_id"],
       "properties": {
         "fig_id": {
           "description": "A unique ID for each figure",
-          "type": ["integer", "null"]
+          "type": "integer" 
         },
-        "caption": {
-          "description": "The figure caption",
-          "type": ["string", "null"]
+        "section_id": {
+          "description": "The ID from the sections table for this figure",
+          "type": "integer"
         },
         "image": {
           "description": "The base64 image or reference to it (undecided)",
-          "type": ["string", "null"]
+          "type": "string",
+          "contentEncoding": "base64"
         }
-      },
-      "required": [ "fig_id", "caption", "image"]
+      }
     },
     "equation": {
       "type": "object",
+      "required": ["text_id", "grp_id", "lhs", "comp", "rhs"],
       "properties": {
         "text_id": { 
-          "definition": "ID from the text table for the source of the equation",
+          "description": "ID from the text table for the source of the equation",
           "type": "integer"
         },
         "grp_id": { 
-          "definition": "Grouping within a sentence (e.g., multiple equations that are grouped by brackets) or table",
+          "description": "Grouping within a sentence (e.g., multiple equations that are grouped by brackets) or table",
           "type": "integer" 
         },
         "lhs": { 
-          "definition": "Left-hand side of the equation",
+          "description": "Left-hand side of the equation",
           "type": "string" 
         },
         "comp": { 
-          "definition": "Comparator symbol(s)",
+           "description": "Comparator symbol(s)",
           "type": "string" 
         },
         "rhs": { 
-          "definition": "Right-hand side of the equation",
+           "description": "Right-hand side of the equation",
           "type": "string" 
         }
-      },
-      "required": ["text_id", "grp_id", "lhs", "comp", "rhs"]
+      }
     }
   }
 }
