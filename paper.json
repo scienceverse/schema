@@ -382,7 +382,8 @@
         },
         "volume": { "type": "string" },
         "issue": { "type": "string" },
-        "pages": { "type": "string" },
+        "first_page": { "type": "string" },
+        "last_page": { "type": "string" },
         "edition": { "type": "string" },
         "version": { "type": "string" },
         "url": { 
