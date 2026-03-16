@@ -449,7 +449,11 @@
         "text_id": { "type": "integer" },
         "section_id": { "type": "integer" },
         "paragraph_id": { "type": "integer" },
-        "text": { "type": "string" }
+        "text": { "type": "string" },
+        "page_number": {
+          "type": "integer",
+          "description": "The page number of the original document where the sentence starts"
+        }
       }
     },
     "table": {
