@@ -205,7 +205,7 @@
           ]
         },
         "oecd_confidence": {
-          "type": "number"
+          "type": "number",
           "minimum": 0,
           "maximum": 1
         }
