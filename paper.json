@@ -90,12 +90,7 @@
         "file_hash",
         "input_format",
         "file_name",
-        "bibr_version",
-        "paper_type",
-        "paper_type_confidence",
-        "oecd_l1",
-        "oecd_l2",
-        "oecd_confidence"
+        "bibr_version"
       ],
       "properties": {
         "title": { "type": "string" },
@@ -216,11 +211,7 @@
       "required": [
         "author_id",
         "given",
-        "family",
-        "affiliation",
-        "email",
-        "corresponding",
-        "orcid"
+        "family"
       ],
       "properties": {
         "author_id": {
@@ -228,19 +219,19 @@
         },
         "given": { "type": ["string", "null"] },
         "family": { "type": ["string", "null"] },
-        "affiliation": { "type": ["string", "null"] },
+        "affiliation": { "type": "string" },
         "email": {
-          "type": ["string", "null"],
+          "type": ["string"],
           "format": "email"
         },
         "corresponding": { "type": "boolean" },
         "orcid": {
-          "type": ["string", "null"],
+          "type": "string",
           "pattern": "^\\d{4}-\\d{4}-\\d{4}-\\d{3}[\\dX]$"
         },
         "role": {
           "type": "array",
-          "items": { "type": ["string", "null"] }
+          "items": { "type": "string" }
         }
       }
     },
@@ -278,12 +269,14 @@
         },
         "title": { "type": "string" },
         "authors": {
-          "type": "string",
-          "description": "Pipe-separated full (last, given) author/creator names in order"
+          "type": "array",
+          "items": { "$ref": "#/$defs/author" },
+          "uniqueItems": true
         },
         "editors": {
-          "type": "string",
-          "description": "Pipe-separated full (last, given) editor names in order"
+          "type": "array",
+          "items": { "$ref": "#/$defs/author" },
+          "uniqueItems": true
         },
         "publisher": {
           "type": "string"
@@ -417,8 +410,7 @@
       "required": ["section_id",
                    "header",
                    "parent_section_id",
-                   "section_type",
-                   "classification_score"],
+                   "section_type"],
       "properties": {
         "section_id": {
           "type": "integer"
@@ -454,9 +446,7 @@
       "type": "object",
       "required": ["text_id", "section_id", "paragraph_id", "text"],
       "properties": {
-        "text_id": {
-          "type": "integer"
-        },
+        "text_id": { "type": "integer" },
         "section_id": { "type": "integer" },
         "paragraph_id": { "type": "integer" },
         "text": { "type": "string" }
@@ -494,21 +484,21 @@
       "properties": {
         "xref_id": {
           "type": "integer",
-          "description": "The ID from the bib, tbl, fig, or section table (for footnotes)"
+          "description": "The ID from the bib, tables, figures, or sections table (for footnotes)"
         },
         "xref_type": {
           "type": "string",
           "enum": [
             "bib",
-            "tbl",
-            "fig",
+            "table",
+            "figure",
             "footnote"
           ]
         },
         "contents": { "type": ["string", "null"] },
         "text_id": {
           "type": "integer",
-          "description": "The ID from the text table for the sentence containing the reference to this object."
+          "description": "The ID from the text table for the sentence containing the cross-reference."
         }
       }
     }
