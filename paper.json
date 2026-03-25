@@ -35,7 +35,7 @@
     },
     "bib": {
       "type": "array",
-      "items": { "$ref": "#/$defs/BIB" },
+      "items": { "$ref": "#/$defs/bib" },
       "uniqueItems": true
     },
     "xref": {
