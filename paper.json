@@ -391,6 +391,8 @@
           "enum": [
             "crossref",
             "openalex",
+            "datacite",
+            "doi.org",
             "openlibrary",
             "manual",
             "other"
