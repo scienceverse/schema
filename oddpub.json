@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://scienceverse.org/schema/oddpub.json",
+  "title": "Open Practices via ODDPub",
+  "description": "Open data and code detection via ODDPub (https://github.com/quest-bih/oddpub). This describes individual papers -- papers may have more than one open data or code source, which are described together here with arrays for open_data_category and by combining sentences for das/cas/open_data_statements/open_code_statements.",
+  
+  "type": "object",
+  
+  "properties": {
+    "article": {
+      "description": "A reference to the paper being processed",
+      "type": ["string"]
+    },
+    "is_open_data": {
+      "description": "Is open data detected",
+      "type": ["boolean"]
+    },
+    "open_data_category": {
+      "description": "What type of data are available",
+      "type": "array",
+      "items": { 
+        "type": "string",
+        "enum": [
+          "field-specific repository",
+          "general-purpose repository",
+          "dataset",
+          "supplemental table or data",
+          "supplementary raw/full data with specific file format",
+          "dataset on Github",
+          "upon request",
+          "re-use",
+          "unknown/misspecified source"
+        ]
+      }
+    },
+    "is_reuse": {
+      "description": "Is data reused from another source",
+      "type": ["boolean"]
+    },
+    "is_open_code": {
+      "description": "Is open code detected",
+      "type": ["boolean"]
+    },
+    "is_code_supplement": {
+      "description": "Is there code in supplemental materials",
+      "type": ["boolean"]
+    },
+    "is_code_reuse": {
+      "description": "Is code reused from another source",
+      "type": ["boolean"]
+    },
+    "is_open_data_das": {
+      "description": "Is there a data availability statement indicating open data",
+      "type": ["boolean"]
+    },
+    "is_open_code_cas": {
+      "description": "Is there a code availability statement indicating open code",
+      "type": ["boolean"]
+    },
+    "das": {
+      "description": "The data availability statement",
+      "type": ["string"]
+    },
+    "open_data_statements": {
+      "description": "Any statements about open data in the full tet",
+      "type": ["string"]
+    },
+    "cas": {
+      "description": "The code availability statement",
+      "type": ["string"]
+    },
+    "open_code_statements": {
+      "description": "Any statements about open code in the full text",
+      "type": ["string"]
+    }
+  },
+  
+  "required": [
+    "article"
+  ],
+  
+  "additionalProperties": false
+}
