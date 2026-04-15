@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://scienceverse.org/schema/open_practices.json",
+  "title": "Open Practices via MetaCheck",
+  "description": "Open practices detection via MetaCheck. This describes individual practices -- papers may have more than one practice, described by an array of open_practices objects.",
+  "type": "object",
+  "properties": {
+    "paper_id": {
+      "description": "A unique ID for each paper",
+      "type": ["string"]
+    },
+    "practice": {
+      "description": "The practice type",
+      "type": ["string"],
+      "enum": [
+        "data",
+        "code", 
+        "materials", 
+        "registration",
+        "other"
+      ]
+    }
+    "is_open": {
+      "description": "Is the practice open",
+      "type": ["boolean"]
+    },
+    "category": {
+      "description": "The category of supporting materials",
+      "type": "array",
+      "items": { 
+        "type": ["string", "null"],
+        "enum": [
+          "field-specific repository",
+          "general-purpose repository",
+          "supplementary",
+          "re-use",
+          "website",
+          "upon request",
+          "unknown"
+        ]
+      }
+    },
+    "location": {
+      "description": "The location of supporting materials (e.g., a URL)",
+      "type": ["string", "null"]
+    },
+    "text_id": {
+      "description": "The text IDs of any supporting statements in the full text",
+      "type": "array",
+      "items": { "type": "integer" }
+    }
+  },
+  "required": [
+    "paper_id",
+    "practice",
+    "is_open"
+  ],
+  "additionalProperties": false
+}
