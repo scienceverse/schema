@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://scienceverse.org/schema/paper.json",
   "title": "Bibr Paper",
-  "description": "A research paper, as processed by bibr (v10.0)",
+  "description": "A research paper, as processed by bibr (v10.5)",
   "type": "object",
   "properties": {
     "paper_id": {
@@ -39,9 +39,9 @@
       "uniqueItems": true
     },
     "xref": {
+      "description": "In-text cross-references. NOT uniqueItems: two identical mentions in one sentence legitimately produce identical rows.",
       "type": "array",
-      "items": { "$ref": "#/$defs/xref" },
-      "uniqueItems": true
+      "items": { "$ref": "#/$defs/xref" }
     },
     "figure": {
       "type": "array",
@@ -61,6 +61,111 @@
       "type": "array",
       "items": { "$ref": "#/$defs/bib_match" },
       "uniqueItems": true
+    },
+    "info_match": {
+      "description": "Enrichment matches for the paper's OWN bibliographic identity (self-DOI lookup); shaped like bib_match minus bib_id",
+      "type": "array",
+      "items": { "$ref": "#/$defs/info_match" }
+    },
+    "funding": {
+      "description": "Structured funding parsed from the funding statement",
+      "type": "array",
+      "items": { "$ref": "#/$defs/funding" }
+    },
+    "affiliations": {
+      "description": "Structured affiliations parsed from the author byline",
+      "type": "array",
+      "items": { "$ref": "#/$defs/affiliation" }
+    },
+    "ocr_config": {
+      "description": "OCR/LLM backend configuration used for this extraction",
+      "type": ["object", "null"],
+      "properties": {
+        "ocr_backend": { "type": ["string", "null"] },
+        "ocr_model": { "type": ["string", "null"] },
+        "llm_provider": { "type": ["string", "null"] },
+        "llm_model": { "type": ["string", "null"] },
+        "no_llm": { "type": "boolean" }
+      }
+    },
+    "enrichment": {
+      "description": "Reference-enrichment completeness; null/absent when enrichment never ran",
+      "type": ["object", "null"],
+      "required": ["complete", "refs_enriched", "refs_total"],
+      "properties": {
+        "complete": { "type": "boolean" },
+        "refs_enriched": { "type": "integer" },
+        "refs_total": { "type": "integer" }
+      }
+    },
+    "processing_warnings": {
+      "description": "Human-readable pipeline warnings; VALIDATION:<severity>:<code>: lines mirror the validation block",
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "llm_usage": {
+      "description": "Per-paper LLM token usage keyed by model name; null when no LLM ran",
+      "type": ["object", "null"],
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": { "type": "integer" }
+      }
+    },
+    "extraction": {
+      "description": "Extraction provenance; null when exported outside the pipeline",
+      "type": ["object", "null"],
+      "required": [
+        "bibr_version",
+        "ref_seg_strategy",
+        "ref_parse_strategy",
+        "ref_seg_fallback_used",
+        "crossref_enrich",
+        "consolidate"
+      ],
+      "properties": {
+        "bibr_version": {
+          "description": "bibr package version (e.g. 0.3.0), distinct from info.schema_version",
+          "type": "string"
+        },
+        "ref_seg_strategy": { "type": "string" },
+        "ref_parse_strategy": { "type": "string" },
+        "ref_seg_fallback_used": { "type": "boolean" },
+        "crossref_enrich": { "type": "boolean" },
+        "consolidate": { "type": "string" },
+        "timings": {
+          "description": "Per-stage wall-clock seconds",
+          "type": ["object", "null"],
+          "additionalProperties": { "type": "number" }
+        },
+        "total_seconds": { "type": ["number", "null"] }
+      }
+    },
+    "validation": {
+      "description": "Output validation gate result; absent when the gate was skipped",
+      "type": "object",
+      "required": ["errors", "warnings", "issues"],
+      "properties": {
+        "errors": { "type": "integer" },
+        "warnings": { "type": "integer" },
+        "issues": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["code", "severity", "message"],
+            "properties": {
+              "code": { "type": "string" },
+              "severity": { "type": "string", "enum": ["error", "warning"] },
+              "message": { "type": "string" },
+              "count": { "type": ["integer", "null"] }
+            }
+          }
+        }
+      }
+    },
+    "_regions": {
+      "description": "Opt-in per-region layout debug payload (bibr include_regions=True); not part of the stable consumer API",
+      "type": "array",
+      "items": { "type": "object" }
     }
   },
 
@@ -90,10 +195,15 @@
         "file_hash",
         "input_format",
         "file_name",
+        "schema_version",
         "bibr_version"
       ],
       "properties": {
         "title": { "type": ["string", "null"] },
+        "abstract": {
+          "description": "The paper's abstract, verbatim (finalized after section classification; may be recovered from front matter when no Abstract heading exists)",
+          "type": ["string", "null"]
+        },
         "keywords": {
           "type": "array",
           "items": { "type": "string" }
@@ -104,18 +214,26 @@
         },
         "file_hash": {
           "type": "string",
-          "pattern": "^[a-f0-9]{14}$"
+          "pattern": "^[a-f0-9]{14,16}$"
         },
         "input_format": {
           "type": "string",
           "enum": [
             "pdf",
             "docx",
+            "xml",
             "unknown"
           ]
         },
         "file_name": { "type": "string" },
-        "bibr_version": { "type": "string" },
+        "schema_version": {
+          "description": "Version of this schema the file conforms to (10.3 renamed bibr_version to schema_version; 10.5 restored bibr_version alongside it)",
+          "type": "string"
+        },
+        "bibr_version": {
+          "description": "Version of the producing bibr package (e.g. 0.3.0). Before 10.3 this field held the schema version instead.",
+          "type": "string"
+        },
         "paper_type": {
           "type": ["string", "null"],
           "enum": [
@@ -193,6 +311,34 @@
           "type": ["number", "null"],
           "minimum": 0,
           "maximum": 1
+        },
+        "journal": {
+          "description": "The paper's own bibliographic identity, verbatim from the front matter (enrichment matches live in info_match)",
+          "type": ["string", "null"]
+        },
+        "volume": { "type": ["string", "null"] },
+        "issue": { "type": ["string", "null"] },
+        "first_page": { "type": ["string", "null"] },
+        "last_page": { "type": ["string", "null"] },
+        "issn": { "type": ["string", "null"] },
+        "publisher": { "type": ["string", "null"] },
+        "published": { "type": ["string", "null"] },
+        "license": { "type": ["string", "null"] },
+        "funding_statement": {
+          "description": "Verbatim funding statement, copied from the classified section body",
+          "type": ["string", "null"]
+        },
+        "coi_statement": {
+          "description": "Verbatim conflict-of-interest statement",
+          "type": ["string", "null"]
+        },
+        "ethics_statement": {
+          "description": "Verbatim ethics/IRB statement",
+          "type": ["string", "null"]
+        },
+        "data_availability": {
+          "description": "Verbatim data-availability statement",
+          "type": ["string", "null"]
         }
       }
     },
@@ -222,6 +368,7 @@
           "pattern": "^https://orcid\\.org/\\d{4}-\\d{4}-\\d{4}-\\d{3}[\\dX]$"
         },
         "role": {
+          "description": "Contribution phrases mapped from the author-contributions statement (e.g. CRediT roles)",
           "type": "array",
           "items": { "type": "string" }
         }
@@ -259,6 +406,10 @@
           "description": "1-based unique section ID (section_id=0 is Root sentinel, excluded from export)"
         },
         "header": { "type": "string" },
+        "level": {
+          "description": "Heading depth (1 = top-level)",
+          "type": "integer"
+        },
         "parent_section_id": {
           "description": "ID of the containing section; null for top-level sections",
           "type": ["integer", "null"]
@@ -266,7 +417,9 @@
         "section_type": {
           "type": ["string", "null"],
           "enum": [
+            "title",
             "abstract",
+            "keywords",
             "intro",
             "method",
             "results",
@@ -274,6 +427,11 @@
             "references",
             "acknowledgment",
             "funding",
+            "author_contributions",
+            "coi",
+            "ethics",
+            "open_data",
+            "appendix",
             "endnote",
             "footnote",
             "table",
@@ -286,6 +444,10 @@
           "type": ["number", "null"],
           "minimum": 0,
           "maximum": 1
+        },
+        "classification_source": {
+          "description": "Which classifier tier produced section_type (e.g. alias, model, llm)",
+          "type": ["string", "null"]
         }
       }
     },
@@ -377,6 +539,14 @@
         "url": {
           "type": ["string", "null"],
           "format": "uri"
+        },
+        "is_in_press": {
+          "description": "Accepted but not yet issued; independent of year (a legacy year=0 sentinel also sets this)",
+          "type": "boolean"
+        },
+        "consolidated_fields": {
+          "description": "Comma-joined names of fields filled/replaced from bib_match by consolidation; absent on unconsolidated output",
+          "type": "string"
         }
       }
     },
@@ -449,6 +619,88 @@
       }
     },
 
+    "info_match": {
+      "description": "Enrichment data from an external service for the paper's own identity; same shape as bib_match minus bib_id",
+      "type": "object",
+      "required": ["service"],
+      "properties": {
+        "service": {
+          "type": "string",
+          "enum": [
+            "crossref",
+            "openalex",
+            "datacite",
+            "doi.org",
+            "openlibrary",
+            "manual",
+            "other"
+          ]
+        },
+        "service_id": { "type": ["string", "null"] },
+        "score": { "type": ["number", "null"] },
+        "bib_type": { "type": ["string", "null"] },
+        "doi": {
+          "type": ["string", "null"],
+          "pattern": "^10\\.\\d{4,9}/\\S+$"
+        },
+        "title": { "type": ["string", "null"] },
+        "authors": {
+          "type": ["array", "null"],
+          "items": { "$ref": "#/$defs/bib_author" }
+        },
+        "editors": {
+          "type": ["array", "null"],
+          "items": { "$ref": "#/$defs/bib_author" }
+        },
+        "publisher": { "type": ["string", "null"] },
+        "year": { "type": ["integer", "null"] },
+        "date": { "type": ["string", "null"], "format": "date" },
+        "container": { "type": ["string", "null"] },
+        "volume": { "type": ["string", "null"] },
+        "issue": { "type": ["string", "null"] },
+        "first_page": { "type": ["string", "null"] },
+        "last_page": { "type": ["string", "null"] },
+        "edition": { "type": ["string", "null"] },
+        "version": { "type": ["string", "null"] },
+        "url": { "type": ["string", "null"], "format": "uri" }
+      }
+    },
+
+    "funding": {
+      "description": "Structured funding entry parsed from the funding statement",
+      "type": "object",
+      "required": ["funder"],
+      "properties": {
+        "funder": { "type": "string" },
+        "award_ids": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+
+    "affiliation": {
+      "description": "Structured affiliation parsed from the author byline; text is verbatim, parsed components are best-effort",
+      "type": "object",
+      "required": ["affiliation_id", "text"],
+      "properties": {
+        "affiliation_id": {
+          "description": "1-based position",
+          "type": "integer"
+        },
+        "text": { "type": "string" },
+        "institution": { "type": ["string", "null"] },
+        "department": { "type": ["string", "null"] },
+        "city": { "type": ["string", "null"] },
+        "country": { "type": ["string", "null"] },
+        "author_ids": {
+          "description": "author_id values from the author table",
+          "type": "array",
+          "items": { "type": "integer" }
+        }
+      }
+    },
+
     "xref": {
       "type": "object",
       "required": ["xref_id", "xref_type", "contents", "text_id"],
@@ -494,6 +746,10 @@
           "type": ["string", "null"],
           "contentEncoding": "base64"
         },
+        "caption": {
+          "description": "The matched caption text",
+          "type": ["string", "null"]
+        },
         "page_number": {
           "type": ["integer", "null"],
           "description": "Source page (1-based)"
@@ -524,6 +780,10 @@
             "type": "array",
             "items": { "type": "string" }
           }
+        },
+        "caption": {
+          "description": "The matched caption text",
+          "type": ["string", "null"]
         },
         "page_number": {
           "type": ["integer", "null"],
