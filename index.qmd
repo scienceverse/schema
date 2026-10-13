@@ -1,10 +1,37 @@
-The following JSON schema are provided for scienceverse objects.
+The following JSON schemas describe ScienceVerse objects.
 
-```{r}
-#| echo: false
-#| results: 'asis'
-f <- list.files(pattern = "\\.json") 
+## bibr paper exports
 
-sprintf("- [%s](%s)", f, f) |> paste0(collapse = "\n") |> cat()
-```
+[`paper.json`](paper.json) is the strict schema for the current **bibr 12.2**
+export. It requires `schema_version: "12.2"`, every root table, and every
+column the exporter always emits; unknown keys are rejected.
 
+Use [`bibr-export-v12-reader.schema.json`](bibr-export-v12-reader.schema.json)
+to consume exports across **12.x** minor versions. It accepts unknown keys
+and new vocabulary values while checking known field types and rejecting
+other major versions.
+
+This replaces the previous 10.5 paper contract: `info` is now `metadata`,
+`info_match` is `metadata_match`, and `affiliations` is `affiliation`.
+The export also includes `source`, `extraction`, footnotes, and affiliation
+and funding match tables. The old ScienceVerse contract remains available as
+[`paper-v10.5.json`](paper-v10.5.json); the upstream v10 and v11 schemas are
+also preserved below.
+
+The versioned bibr schemas are unmodified generated artifacts from
+[bibr commit 2da14cc](https://github.com/scienceverse/bibr/commit/2da14cce8d34c00e701f706e3cf415943a1f46f3)
+and retain their canonical identifiers under `https://bibr.org/schema/`.
+`paper.json` contains the same strict contract with its ScienceVerse identifier.
+
+## All schemas
+
+- [paper.json](paper.json)
+- [bibr-export-v12.schema.json](bibr-export-v12.schema.json)
+- [bibr-export-v12-reader.schema.json](bibr-export-v12-reader.schema.json)
+- [bibr-export-v11.schema.json](bibr-export-v11.schema.json)
+- [bibr-export-v10.schema.json](bibr-export-v10.schema.json)
+- [paper-v10.5.json](paper-v10.5.json)
+- [oddpub.json](oddpub.json)
+- [open_practices.json](open_practices.json)
+- [power.json](power.json)
+- [power_array.json](power_array.json)

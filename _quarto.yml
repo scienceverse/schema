@@ -1,7 +1,8 @@
 project:
   type: website
   output-dir: docs
-  resources: []
+  resources:
+    - "*.json"
 
 website:
   title: "ScienceVerse Schema"
