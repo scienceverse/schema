@@ -118,16 +118,31 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<p>The following JSON schema are provided for scienceverse objects.</p>
+<p>The following JSON schemas describe ScienceVerse objects.</p>
+<section id="bibr-paper-exports" class="level2">
+<h2 class="anchored" data-anchor-id="bibr-paper-exports">bibr paper exports</h2>
+<p><a href="paper.json"><code>paper.json</code></a> is the strict schema for the current <strong>bibr 12.2</strong> export. It requires <code>schema_version: "12.2"</code>, every root table, and every column the exporter always emits; unknown keys are rejected.</p>
+<p>Use <a href="bibr-export-v12-reader.schema.json"><code>bibr-export-v12-reader.schema.json</code></a> to consume exports across <strong>12.x</strong> minor versions. It accepts unknown keys and new vocabulary values while checking known field types and rejecting other major versions.</p>
+<p>This replaces the previous 10.5 paper contract: <code>info</code> is now <code>metadata</code>, <code>info_match</code> is <code>metadata_match</code>, and <code>affiliations</code> is <code>affiliation</code>. The export also includes <code>source</code>, <code>extraction</code>, footnotes, and affiliation and funding match tables. The old ScienceVerse contract remains available as <a href="paper-v10.5.json"><code>paper-v10.5.json</code></a>; the upstream v10 and v11 schemas are also preserved below.</p>
+<p>The versioned bibr schemas are unmodified generated artifacts from <a href="https://github.com/scienceverse/bibr/commit/2da14cce8d34c00e701f706e3cf415943a1f46f3">bibr commit 2da14cc</a> and retain their canonical identifiers under <code>https://bibr.org/schema/</code>. <code>paper.json</code> contains the same strict contract with its ScienceVerse identifier.</p>
+</section>
+<section id="all-schemas" class="level2">
+<h2 class="anchored" data-anchor-id="all-schemas">All schemas</h2>
 <ul>
+<li><a href="paper.json">paper.json</a></li>
+<li><a href="bibr-export-v12.schema.json">bibr-export-v12.schema.json</a></li>
+<li><a href="bibr-export-v12-reader.schema.json">bibr-export-v12-reader.schema.json</a></li>
+<li><a href="bibr-export-v11.schema.json">bibr-export-v11.schema.json</a></li>
+<li><a href="bibr-export-v10.schema.json">bibr-export-v10.schema.json</a></li>
+<li><a href="paper-v10.5.json">paper-v10.5.json</a></li>
 <li><a href="oddpub.json">oddpub.json</a></li>
 <li><a href="open_practices.json">open_practices.json</a></li>
-<li><a href="paper.json">paper.json</a></li>
-<li><a href="power_array.json">power_array.json</a></li>
 <li><a href="power.json">power.json</a></li>
+<li><a href="power_array.json">power_array.json</a></li>
 </ul>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
